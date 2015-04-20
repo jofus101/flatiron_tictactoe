@@ -1,5 +1,6 @@
 $(document).ready(function() {
 
+  //globals (not my favorite either) for tracking game state
   var isXTurn = true;
   var turnCount = 0;
   var gameOver = false;
@@ -31,6 +32,9 @@ $(document).ready(function() {
   //   return isColWinning;
   // }
 
+  // This just iterates over the collection seeing if the
+  // contained text is what we expect either X or O depending
+  // upon the game state/player turn
   function checkForWin($elems) {    
     var isWinning = true;
     $elems.each(function (){
@@ -41,6 +45,8 @@ $(document).ready(function() {
     return isWinning;
   }
 
+  // Meaty function that checks all rows, cols, and diagonals
+  // Returns true if any of them are consistent otherwise it's false
   function checkGameForWin() {    
     if (checkForWin($(".row1").children("button")) ||
         checkForWin($(".row2").children("button")) ||
@@ -56,15 +62,20 @@ $(document).ready(function() {
     return false
   }
 
-
+  // Do stuff on button clicks
   $("button").click(function(){
+    // Unless the game is over... Don't do anything then
     if (gameOver) {
       return;
     }
+    // Only fill in blank buttons
     if($(this).text() == "+") {
       var currentLetter = isXTurn ? "X" : "O"
+      // Replace the button text with the appropriate X or O
       $(this).text(currentLetter);
+      // turnCount lets us know if the board is full.
       turnCount++;
+
       if (checkGameForWin())
       {
         alert(currentLetter + " : Is our winner!!")
@@ -72,6 +83,7 @@ $(document).ready(function() {
         return;
       }
       else {
+        // if we don't win, flip the boolean for turns
         isXTurn = !isXTurn;        
       }  
     }
